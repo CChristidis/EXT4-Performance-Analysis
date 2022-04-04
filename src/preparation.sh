@@ -64,7 +64,6 @@ do_stuff(){
 		fi
 	done
 	
-	rm $1
 }
 
 do_stuff $1 $2 $3 $4 $5 $6
