@@ -21,6 +21,8 @@ WORKLOAD_FILES=(/root/filebench-1.5-alpha3/workloads/singlestreamread.f
 		/root/filebench-1.5-alpha3/workloads/videoserver.f)
 
 do_stuff(){
+	echo "500" >> "/proc/sys/vm/dirty_expire_centisecs"
+	echo "100" >> "/proc/sys/vm/dirty_writeback_centisecs"
 	dirty_expire_csecs=$(< /proc/sys/vm/dirty_expire_centisecs)
 	mean_file_size=$(( $2 * 1024 ))  	# in KB
 	filesize_with_mean=$(($3 * 1024))	# in KB
@@ -28,8 +30,8 @@ do_stuff(){
 	nthreads=$(($4))
 	nshadows=$(($5))
 	ndbwriters=$(($6))
-
-	if [ $dirty_expire_csecs > $1 ]; then
+	
+	if [ $((dirty_expire_csecs/100)) > $1 ]; then
 		echo "WARNING: some data may not have been written into secondary storage."
 	fi
 	
