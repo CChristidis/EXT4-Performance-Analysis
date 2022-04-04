@@ -2,6 +2,9 @@
 
 declare -a WORKLOAD_FILES
 
+
+# $1: workbench running time in seconds
+
 WORKLOAD_FILES=(/root/filebench-1.5-alpha3/workloads/singlestreamread.f
 		/root/filebench-1.5-alpha3/workloads/singlestreamwrite.f
 		/root/filebench-1.5-alpha3/workloads/randomread.f
@@ -22,14 +25,17 @@ do_stuff(){
 	do
 		if tail -1 "$file" | grep "run "; then
 			sed -i '$ d' "$file"
-			echo "run 15" >> "$file"
+			echo "run $1" >> "$file"
+
 		else
-			echo "run 15" >> "$file"
+			echo "run $1" >> "$file"
 		fi
 	done
 }
 
+do_stuff $1
 
-do_stuff
+	
+
 
 
