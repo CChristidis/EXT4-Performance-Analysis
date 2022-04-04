@@ -7,8 +7,8 @@ declare -a WORKLOAD_FILES
 # $2: meanfilesize in KB
 # $3: filesize_with_mean in KB or filesize in MB
 # $4: $nthreads 
-# $5: $nshadows (number of processes executing reading operations)
-# $6: $ndbwriters (number of processes executing writing operations)
+# $5: $nshadows (number of processes executing reading operations) for oltp.f. Default: 200
+# $6: $ndbwriters (number of processes executing writing operations) for otlp.f. Default: 10
 
 WORKLOAD_FILES=(/root/filebench-1.5-alpha3/workloads/singlestreamread.f
 		/root/filebench-1.5-alpha3/workloads/singlestreamwrite.f
