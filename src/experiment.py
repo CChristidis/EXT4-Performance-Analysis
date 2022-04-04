@@ -12,10 +12,10 @@ personality_options = ("fileserver", "oltp", "randomread", "randomwrite", "singl
 def printStatistics(runs, final_metric_conf_interval, final_metric_stdev, final_metric_mean, chosenMetricList):
     print("\n" * 1)
     print("------------------- Statistics for metric '" + sys.argv[1] + "' -------------------")
-    print("Number of runs: {}".format(runs))
-    print("95% confidence interval = {}".format(round(final_metric_conf_interval, 5)))
-    print("Standard deviation = {}".format(round(final_metric_stdev, 5)))
-    print("Mean = {}".format(final_metric_mean))
+    print("Number of runs: {}\n".format(runs))
+    print("95% confidence interval = {}\n".format(round(final_metric_conf_interval, 5)))
+    print("Standard deviation = {}\n".format(round(final_metric_stdev, 5)))
+    print("Mean = {}\n".format(final_metric_mean))
     print("Sample list: {}".format(chosenMetricList))
     print("-----------------------------------------------------------------------")
     print("\n" * 1)
@@ -173,13 +173,13 @@ def runExperiment():
         runs += 1
 
         if runs > 1:
-            if calculate_95_conf_interval(chosenMetricList)/(sum(chosenMetricList)/len(chosenMetricList)) < alpha:
-                final_metric_conf_interval = calculate_95_conf_interval(chosenMetricList)
-                final_metric_stdev = stdev(chosenMetricList)
-                final_metric_mean = sum(chosenMetricList)/len(chosenMetricList)
+            conf_interval = calculate_95_conf_interval(chosenMetricList)
+            mean = sum(chosenMetricList) / len(chosenMetricList)
+            if (conf_interval / mean) < alpha:
                 need_more_runs = False
+
     subprocess.call(["sh", "/root/scripts/stop-disk.sh"])
-    printStatistics(runs, final_metric_conf_interval, final_metric_stdev, final_metric_mean, chosenMetricList)
+    printStatistics(runs, conf_interval, stdev(chosenMetricList), mean, chosenMetricList)
 
 
 
