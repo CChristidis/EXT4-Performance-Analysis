@@ -5,7 +5,7 @@ declare -a WORKLOAD_FILES
 
 # $1: workbench running time in seconds
 # $2: meanfilesize in KB
-# $3: filesize_with_mean in KB or filesize in MB
+# $3: filesize_with_mean in KB or filesize in MB (filesize = 10 for oltp.f)
 # $4: $nthreads 
 # $5: $nshadows (number of processes executing reading operations) for oltp.f. Default: 200
 # $6: $ndbwriters (number of processes executing writing operations) for otlp.f. Default: 10
