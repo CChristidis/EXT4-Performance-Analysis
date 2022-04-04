@@ -46,11 +46,17 @@ def read_vmstat_results(mem_free, mem_inact, mem_active):
 
         return (mem_free, mem_inact, mem_active)
 
-def read_iostat_results():
-    pass
+def read_iostat_results(io_tps, io_kB_read_rate, io_kB_write_rate, io_kB_read, io_kB_written):
+    with open('/tmp/iostat.out', 'r') as io_file:
+        iostat_line4 = io_file.readlines()[3].split()
 
+        io_tps += float(iostat_line4[1])
+        io_kB_read_rate += float(iostat_line4[2])
+        io_kB_write_rate += float(iostat_line4[3])
+        io_kB_read += int(iostat_line4[5])
+        io_kB_written += int(iostat_line4[6])
 
-
+        return (io_tps, io_kB_read_rate, io_kB_write_rate, io_kB_read, io_kB_written)
 
 def runExperiment():
     runs = 0  # experiment repetitions
@@ -62,13 +68,22 @@ def runExperiment():
     iostat_options = ("-d", "sda3")
     vmstat_options = ("-a")
 
+    # cpu-related metrics
     cpu_usr_avg = 0
     cpu_sys_avg = 0
     cpu_iostat_avg = 0
 
+    # memory-related metrics
     mem_free = 0
     mem_inact = 0
     mem_active = 0
+
+    # persistent-related metrics
+    io_tps = 0
+    io_kB_read_rate = 0
+    io_kB_write_rate = 0
+    io_kB_read = 0
+    io_kB_written = 0
 
 
     while need_more_runs:
@@ -97,9 +112,19 @@ def runExperiment():
         mem_inact = vmstat_results_tuple[1]
         mem_active = vmstat_results_tuple[2]
 
+
+
+        # update iostat result variables
+        iostat_results_tuple = read_iostat_results(io_tps, io_kB_read_rate, io_kB_write_rate, io_kB_read, io_kB_written)
+        io_tps = iostat_results_tuple[0]
+        io_kB_read_rate = iostat_results_tuple[1]
+        io_kB_write_rate = iostat_results_tuple[2]
+        io_kB_read = iostat_results_tuple[3]
+        io_kB_written = iostat_results_tuple[4]
+
         print(cpu_usr_avg, cpu_sys_avg, cpu_iostat_avg)
         print(mem_free, mem_inact, mem_active)
-        # update iostat result variables
+        print(io_tps, io_kB_read_rate, io_kB_write_rate, io_kB_read, io_kB_written)
 
         runs += 1
 
