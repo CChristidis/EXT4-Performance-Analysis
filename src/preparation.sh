@@ -31,7 +31,7 @@ do_stuff(){
 	nshadows=$(($5))
 	ndbwriters=$(($6))
 	
-	if [ $((dirty_expire_csecs/100)) > $1 ]; then
+	if [ $((dirty_expire_csecs/100)) -gt $1 ]; then
 		echo "WARNING: some data may not have been written into secondary storage."
 	fi
 	
