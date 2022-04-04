@@ -27,6 +27,31 @@ def call_filebench(outfile_path, personality_name):
         subprocess.run(["filebench", "-f", "/root/workloads/" + personality_name + ".f"], stdout=outfile)
 
 
+def read_mpstat_results(cpu_usr_avg, cpu_sys_avg, cpu_iostat_avg):
+    with open('/tmp/mpstat.out', 'r') as mp_file:
+        mpstat_line4 = mp_file.readlines()[3].split()
+        cpu_usr_avg += float(mpstat_line4[3])
+        cpu_sys_avg += float(mpstat_line4[5])
+        cpu_iostat_avg += float(mpstat_line4[6])
+
+        return (cpu_usr_avg, cpu_sys_avg, cpu_iostat_avg)
+
+
+def read_vmstat_results(mem_free, mem_inact, mem_active):
+    with open('/tmp/vmstat.out', 'r') as vm_file:
+        vmstat_line3 = vm_file.readlines()[2].split()
+        mem_free += int(vmstat_line3[3])
+        mem_inact += int(vmstat_line3[4])
+        mem_active += int(vmstat_line3[5])
+
+        return (mem_free, mem_inact, mem_active)
+
+def read_iostat_results():
+    pass
+
+
+
+
 def runExperiment():
     runs = 0  # experiment repetitions
     alpha = 0.05  # confidence interval
@@ -36,6 +61,15 @@ def runExperiment():
     mpstat_options = ("-P", "ALL")
     iostat_options = ("-d", "sda3")
     vmstat_options = ("-a")
+
+    cpu_usr_avg = 0
+    cpu_sys_avg = 0
+    cpu_iostat_avg = 0
+
+    mem_free = 0
+    mem_inact = 0
+    mem_active = 0
+
 
     while need_more_runs:
         # Start a clean filesystem
@@ -48,7 +82,24 @@ def runExperiment():
         with open('/proc/sys/vm/drop_caches', "w") as outfile:
             subprocess.run(["echo", "3"], stdout=outfile)
 
+        # execute oltp.f
         call_filebench('/tmp/results', personality_options[1])
+
+        # update mpstat result variables
+        mpstat_results_tuple = read_mpstat_results(cpu_usr_avg, cpu_sys_avg, cpu_iostat_avg)
+        cpu_usr_avg = mpstat_results_tuple[0]
+        cpu_sys_avg = mpstat_results_tuple[1]
+        cpu_iostat_avg = mpstat_results_tuple[2]
+
+        # update vmstat result variables
+        vmstat_results_tuple = read_vmstat_results(mem_free, mem_inact, mem_active)
+        mem_free = vmstat_results_tuple[0]
+        mem_inact = vmstat_results_tuple[1]
+        mem_active = vmstat_results_tuple[2]
+
+        print(cpu_usr_avg, cpu_sys_avg, cpu_iostat_avg)
+        print(mem_free, mem_inact, mem_active)
+        # update iostat result variables
 
         runs += 1
 
