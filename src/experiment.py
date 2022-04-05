@@ -16,7 +16,7 @@ def printStatistics(runs, final_metric_conf_interval, final_metric_stdev, final_
     print("Number of runs: {}\n".format(runs))
     print("95% confidence interval = {}\n".format(round(final_metric_conf_interval, 5)))
     print("Standard deviation = {}\n".format(round(final_metric_stdev, 5)))
-    print("Mean = {}\n".format(final_metric_mean))
+    print("Mean = {}\n".format(round(final_metric_mean), 5))
     print("Sample list: {}".format(chosenMetricList))
     print("-----------------------------------------------------------------------")
     print("\n" * 1)
