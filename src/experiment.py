@@ -21,6 +21,15 @@ def printStatistics(runs, final_metric_conf_interval, final_metric_stdev, final_
     print("\n" * 1)
 
 
+def printScriptSyntax():
+    print("\n" * 1)
+    print("Experiment script's syntax:\npython3 experiment.py <metric> <filebench personality>")
+    print("\n<metric> = {usr_avg, sys_avg, iostat_avg, free, inact, active, tps, kB_read_rate, "
+           "kB_write_rate, kB_read, kB_wrtn}")
+    print("\n<filebench personality> = {fileserver, oltp, randomread, randomwrite, singlestreamread, "
+           "singlestreamwrite, varmail, videoserver, webproxy, webserver}")
+    print("\n" * 1)
+    sys.exit(1)
 
 def calculate_95_conf_interval(sample_list):
     conf_interval_95 = (1.96 * stdev(sample_list)) / (len(sample_list)**(0.5))
@@ -106,33 +115,44 @@ def runExperiment():
     io_kB_written = []
 
     chosenMetricList = []
+    
+    try:
+        if sys.argv[1] == "usr_avg":
+            chosenMetricList = cpu_usr_avg
+        elif sys.argv[1] == "sys_avg":
+            chosenMetricList = cpu_sys_avg
+        elif sys.argv[1] == "iostat_avg":
+            chosenMetricList = cpu_iostat_avg
+        elif sys.argv[1] == "free":
+            chosenMetricList = mem_free
+        elif sys.argv[1] == "inact":
+            chosenMetricList = mem_inact
+        elif sys.argv[1] == "active":
+            chosenMetricList = mem_active
+        elif sys.argv[1] == "tps":
+            chosenMetricList = io_tps
+        elif sys.argv[1] == "kB_read_rate":
+            chosenMetricList = io_kB_read_rate
+        elif sys.argv[1] == "kB_write_rate":
+            chosenMetricList = io_kB_write_rate
+        elif sys.argv[1] == "kB_read":
+            chosenMetricList = io_kB_read
+        elif sys.argv[1] == "kB_wrtn":
+            chosenMetricList = io_kB_written
+        else:
+            sys.exit("Metrics list: <usr_avg, sys_avg, iostat_avg, free, inact, active, tps, "
+                    "kB_read_rate, kB_write_rate, kB_read, kB_wrtn>")
+    except IndexError:
+        printScriptSyntax()
 
-    if sys.argv[1] == "usr_avg":
-        chosenMetricList = cpu_usr_avg
-    elif sys.argv[1] == "sys_avg":
-        chosenMetricList = cpu_sys_avg
-    elif sys.argv[1] == "iostat_avg":
-        chosenMetricList = cpu_iostat_avg
-    elif sys.argv[1] == "free":
-        chosenMetricList = mem_free
-    elif sys.argv[1] == "inact":
-        chosenMetricList = mem_inact
-    elif sys.argv[1] == "active":
-        chosenMetricList = mem_active
-    elif sys.argv[1] == "tps":
-        chosenMetricList = io_tps
-    elif sys.argv[1] == "kB_read_rate":
-        chosenMetricList = io_kB_read_rate
-    elif sys.argv[1] == "kB_write_rate":
-        chosenMetricList = io_kB_write_rate
-    elif sys.argv[1] == "kB_read":
-        chosenMetricList = io_kB_read
-    elif sys.argv[1] == "kB_wrtn":
-        chosenMetricList = io_kB_written
-    else:
-        sys.exit("Syntax: python3 experiment.py <usr_avg, sys_avg, iostat_avg, free,"
-                 "inact, active, tps, kB_read_rate, kB_write_rate, kB_read, kB_wrtn>")
-
+    try:
+        if sys.argv[2] in personality_options:
+            chosen_personality = sys.argv[2]
+        else:
+            sys.exit("Personlaity options: <fileserver, oltp, randomread, randomwrite, singlestreamread, singlestreamwrite, "
+                 "varmail, videoserver, webproxy, webserver>")
+    except IndexError:
+        printScriptSyntax()
 
 
     while need_more_runs:
@@ -146,8 +166,8 @@ def runExperiment():
         with open('/proc/sys/vm/drop_caches', "w") as outfile:
             subprocess.run(["echo", "3"], stdout=outfile)
 
-        # execute oltp.f
-        call_filebench('/tmp/results', personality_options[1])
+        # execute filebench personality
+        call_filebench('/tmp/results', chosen_personality)
 
         # update mpstat result variables
         mpstat_results_tuple = read_mpstat_results(cpu_usr_avg, cpu_sys_avg, cpu_iostat_avg)
