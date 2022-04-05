@@ -1,9 +1,10 @@
 import subprocess
 from statistics import stdev
 import sys
+import os
 
 " Globals: "
-ext4_mount_options = ("journaled", "ordered", "writeback")
+ext4_mount_options = ("journal", "ordered", "writeback")
 personality_options = ("fileserver", "oltp", "randomread", "randomwrite", "singlestreamread", "singlestreamwrite",
                        "varmail", "videoserver", "webproxy", "webserver")
 
@@ -38,7 +39,8 @@ def calculate_95_conf_interval(sample_list):
 
 def call_mpstat(outfile_path, mpstat_options):
     with open(outfile_path, "w") as outfile:
-        subprocess.run(["mpstat", mpstat_options[0], mpstat_options[1]], stdout=outfile)
+        subprocess.run(["mpstat", mpstat_options[0], mpstat_options[1], mpstat_options[2],
+                        mpstat_options[3]], stdout=outfile)
 
 
 def call_iostat(outfile_path, iostat_options):
@@ -58,10 +60,10 @@ def call_filebench(outfile_path, personality_name):
 
 def read_mpstat_results(cpu_usr_avg, cpu_sys_avg, cpu_iostat_avg):
     with open('/tmp/mpstat.out', 'r') as mp_file:
-        mpstat_line4 = mp_file.readlines()[3].split()
-        cpu_usr_avg.append(float(mpstat_line4[3]))
-        cpu_sys_avg.append(float(mpstat_line4[5]))
-        cpu_iostat_avg.append(float(mpstat_line4[6]))
+        mpstat_line24 = mp_file.readlines()[23].split()
+        cpu_usr_avg.append(float(mpstat_line24[2]))
+        cpu_sys_avg.append(float(mpstat_line24[4]))
+        cpu_iostat_avg.append(float(mpstat_line24[5]))
 
         return (cpu_usr_avg, cpu_sys_avg, cpu_iostat_avg)
 
@@ -93,7 +95,7 @@ def runExperiment():
     need_more_runs = True
     ext4_journal = ""
 
-    mpstat_options = ("-P", "ALL")
+    mpstat_options = ("-P", "ALL", "2", "5")
     iostat_options = ("-d", "sda3")
     vmstat_options = ("-a")
 
@@ -156,8 +158,10 @@ def runExperiment():
 
 
     while need_more_runs:
-        subprocess.call(["sh", "/root/scripts/start-disk.sh", " ext4-$ " + ext4_mount_options[0]])
+        os.system("/bin/bash /root/scripts/start-disk.sh ext4-" + ext4_mount_options[0])
+        # subprocess.call(["/root/scripts/start-disk.sh", " ext4-" + ext4_mount_options[0]])
         # Start a clean filesystem
+
         call_mpstat('/tmp/mpstat.out', mpstat_options)
         call_iostat('/tmp/iostat.out', iostat_options)
         call_vmstat('/tmp/vmstat.out', vmstat_options)
@@ -195,15 +199,18 @@ def runExperiment():
         if runs > 1:
             conf_interval = calculate_95_conf_interval(chosenMetricList)
             mean = sum(chosenMetricList) / len(chosenMetricList)
+            printStatistics(runs, conf_interval, stdev(chosenMetricList), mean, chosenMetricList)
             if (conf_interval / mean) < alpha:
                 need_more_runs = False
+        os.system("/bin/bash /root/scripts/stop-disk.sh")
+        # subprocess.call(["/bin/bash", "/root/scripts/stop-disk.sh"])
 
-    subprocess.call(["sh", "/root/scripts/stop-disk.sh"])
     printStatistics(runs, conf_interval, stdev(chosenMetricList), mean, chosenMetricList)
 
 
 
 if __name__ == "__main__":
+    os.system("/bin/bash /root/scripts/stop-disk.sh")
     runExperiment()
 
 
