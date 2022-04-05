@@ -217,7 +217,7 @@ def runExperiment():
     printStatistics(runs, conf_interval, standard_dev, mean,
                     chosenMetricList, tput)
 
-    os.system("/bin/bash /root/Desktop/get_fields.sh " + chosen_personality + ".f " + str(conf_interval) + " " +
+    os.system("/bin/bash /root/Desktop/stats.sh " + chosen_personality + ".f " + str(conf_interval) + " " +
     str(standard_dev) + " " + str(mean) + " " + str(tput[:len(tput)-4]))
 
 
