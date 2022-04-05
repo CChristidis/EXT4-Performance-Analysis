@@ -8,16 +8,25 @@ ext4_mount_options = ("journal", "ordered", "writeback")
 personality_options = ("fileserver", "oltp", "randomread", "randomwrite", "singlestreamread", "singlestreamwrite",
                        "varmail", "videoserver", "webproxy", "webserver")
 
+def get_throughput():
+    with open('/tmp/results', 'r') as res_file:
+          line = res_file.readlines()
+          for i in line:
+              split_line = i.split()
+              if "Summary:" in split_line:
+                  for j in split_line:
+                      if j[-4:] == "mb/s":
+                          return j
 
-
-def printStatistics(runs, final_metric_conf_interval, final_metric_stdev, final_metric_mean, chosenMetricList):
+def printStatistics(runs, final_metric_conf_interval, final_metric_stdev, final_metric_mean, chosenMetricList, throughput):
     print("\n" * 1)
     print("------------------- Statistics for metric '" + sys.argv[1] + "' -------------------")
     print("Number of runs: {}\n".format(runs))
     print("95% confidence interval = {}\n".format(round(final_metric_conf_interval, 5)))
     print("Standard deviation = {}\n".format(round(final_metric_stdev, 5)))
     print("Mean = {}\n".format(round(final_metric_mean), 5))
-    print("Sample list: {}".format(chosenMetricList))
+    print("Sample list: {}\n".format(chosenMetricList))
+    print("Throughput = {}".format(throughput))
     print("-----------------------------------------------------------------------")
     print("\n" * 1)
 
@@ -157,7 +166,7 @@ def runExperiment():
         printScriptSyntax()
 
 
-    while need_more_runs and runs < 10:
+    while need_more_runs and runs < 3:
         os.system("/bin/bash /root/scripts/start-disk.sh ext4-" + ext4_mount_options[0])
         # subprocess.call(["/root/scripts/start-disk.sh", " ext4-" + ext4_mount_options[0]])
         # Start a clean filesystem
@@ -172,7 +181,6 @@ def runExperiment():
 
         # execute filebench personality
         call_filebench('/tmp/results', chosen_personality)
-
         # update mpstat result variables
         mpstat_results_tuple = read_mpstat_results(cpu_usr_avg, cpu_sys_avg, cpu_iostat_avg)
         cpu_usr_avg = mpstat_results_tuple[0]
@@ -195,22 +203,24 @@ def runExperiment():
         io_kB_written = iostat_results_tuple[4]
 
         runs += 1
-
         if runs > 1:
             conf_interval = calculate_95_conf_interval(chosenMetricList)
             mean = sum(chosenMetricList) / len(chosenMetricList)
-            printStatistics(runs, conf_interval, stdev(chosenMetricList), mean, chosenMetricList)
+            # printStatistics(runs, conf_interval, stdev(chosenMetricList), mean, chosenMetricList, get_throughput())
             if (conf_interval / mean) < alpha:
                 need_more_runs = False
         os.system("/bin/bash /root/scripts/stop-disk.sh")
         # subprocess.call(["/bin/bash", "/root/scripts/stop-disk.sh"])
 
-    printStatistics(runs, conf_interval, stdev(chosenMetricList), mean, chosenMetricList)
+    tput = get_throughput()
+    standard_dev = stdev(chosenMetricList)
+    printStatistics(runs, conf_interval, standard_dev, mean,
+                    chosenMetricList, tput)
 
+    os.system("/bin/bash /root/Desktop/get_fields.sh " + chosen_personality + ".f " + str(conf_interval) + " " +
+    str(standard_dev) + " " + str(mean) + " " + str(tput[:len(tput)-4]))
 
 
 if __name__ == "__main__":
     os.system("/bin/bash /root/scripts/stop-disk.sh")
     runExperiment()
-
-
