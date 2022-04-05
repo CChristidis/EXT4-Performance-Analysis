@@ -53,7 +53,7 @@ def call_vmstat(outfile_path, vmstat_options):
 
 def call_filebench(outfile_path, personality_name):
     with open(outfile_path, "w") as outfile:
-        subprocess.run(["filebench", "-f", "/root/workloads/" + personality_name + ".f"], stdout=outfile)
+        subprocess.run(["filebench", "-f", "/root/workloads/" + personality_name + ".f", ">"], stdout=outfile)
 
 
 def read_mpstat_results(cpu_usr_avg, cpu_sys_avg, cpu_iostat_avg):
@@ -115,7 +115,7 @@ def runExperiment():
     io_kB_written = []
 
     chosenMetricList = []
-    
+
     try:
         if sys.argv[1] == "usr_avg":
             chosenMetricList = cpu_usr_avg
