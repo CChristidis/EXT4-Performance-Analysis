@@ -66,7 +66,17 @@ do_stuff(){
 	
 }
 
+printExperimentScriptSyntax(){
+	printf "\n"
+	printf "Experiment script's syntax:\npython3 experiment.py <metric> <filebench personality>\n"
+	printf "\n<metric> = {usr_avg, sys_avg, iostat_avg, free, inact, active, tps, kB_read_rate, kB_write_rate, kB_read, kB_wrtn}\n"
+	printf "\n<filebench personality> = {fileserver, oltp, randomread, randomwrite, singlestreamread, singlestreamwrite, varmail, videoserver, webproxy, webserver}"
+	printf "\n"
+}
+
+
 do_stuff $1 $2 $3 $4 $5 $6
+printExperimentScriptSyntax
 
 	
 
