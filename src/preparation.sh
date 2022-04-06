@@ -35,7 +35,7 @@ printExperimentScriptSyntax(){
 
 
 makePreparations
-printExperimentScriptSyntax
+# printExperimentScriptSyntax
 
 
 
