@@ -15,6 +15,10 @@ WORKLOAD_FILES=(/root/filebench-1.5-alpha3/workloads/singlestreamread.f
 
 
 makePreparations(){
+
+	# clear stats file.
+	> /root/Desktop/experiment_stats.txt
+
 	echo "500" >> "/proc/sys/vm/dirty_expire_centisecs"
 	echo "100" >> "/proc/sys/vm/dirty_writeback_centisecs"
 
