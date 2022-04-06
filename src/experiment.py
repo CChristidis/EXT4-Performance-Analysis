@@ -217,8 +217,8 @@ def runExperiment():
     printStatistics(runs, conf_interval, standard_dev, mean,
                     chosenMetricList, tput)
 
-    os.system("/bin/bash /root/Desktop/stats.sh " + chosen_personality + ".f " + str(conf_interval) + " " +
-    str(standard_dev) + " " + str(mean) + " " + str(tput[:len(tput)-4]))
+    os.system("/bin/bash /root/Desktop/stats.sh " + chosen_personality + ".f " + str(round(conf_interval, 5)) + " " +
+    str(round(standard_dev, 5)) + " " + str(round(mean, 5)) + " " + str(round(float(tput[:len(tput)-4]), 5)))
 
 
 if __name__ == "__main__":
