@@ -52,6 +52,7 @@ runExperiments(){
 		run=10
 		filesize=128
 		nthreads=50
+		# we'll place a for here to update the parameters and run experiment.py multiple times.
 		/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
 		python3 experiment.py $2 $1
 
@@ -117,6 +118,13 @@ runExperiments(){
 	
 	echo "$(column -s, -t --table-columns 95%_conf_interval,std_dev,mean,throughput,filesize,filesize_mean,meanfilesize,nthreads,nshadows,ndbwriters /root/Desktop/experiment_stats.txt)" > /root/Desktop/experiment_stats.txt
 }
+
+
+
+
+
+
+
 
 
 # init_parameters $2
