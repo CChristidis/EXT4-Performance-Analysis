@@ -287,7 +287,7 @@ runExperiments(){
 	
 	echo "$(column -s, -t --table-columns 95%_conf_interval,std_dev,mean,throughput,filesize,filesize_mean,meanfilesize,nthreads,nshadows,ndbwriters /root/Desktop/experiment_stats.txt)" > /root/Desktop/experiment_stats.txt
 	# plot here
-	python3 plot_results.py /root/Desktop/experiment_stats.txt $1 $2
+	python3 plot_results.py /root/Desktop/experiment_stats.txt $2 $1
 }
 
 
