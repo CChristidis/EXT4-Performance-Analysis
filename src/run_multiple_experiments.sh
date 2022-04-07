@@ -9,7 +9,7 @@ path="/root/workloads/$1.f"
 
 # $3: Experiment type flag. e.g. for oltp: if $3 -eq 1 -> nshadows and ndbwriters increase. if $3 -eq 2 -> nshadows and ndbwriters decrease
 # if $3 -eq 3 -> nshadows increase and ndbwriters decrease. if $3 -eq 4 -> nshadows decrease and ndbwriters increase.
-# flags 5, 6, 7, 8 correspond only to oltp personality option and decrease the filesize parameter.
+
 /bin/bash ./preparation.sh 
 
 
