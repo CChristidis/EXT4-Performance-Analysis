@@ -18,7 +18,7 @@ runExperiments(){
 
 	if [ $1 == "fileserver" ];then
 		run=10
-		filesize=128
+		filesize=128	# KB
 		nthreads=50
 		# we'll place a for here to update the parameters and run experiment.py multiple times.
 		/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
@@ -26,14 +26,11 @@ runExperiments(){
 
 	elif [ $1 == "oltp" ];then
 		run=10
-		filesize=10  # MB
+		filesize=10	# MB
 		nshadows=200
 		ndbwriters=25
 		if [ $3 -eq 1 ];then
 			for i in {1..5};do
-				echo $filesize
-				echo $nshadows
-				echo $ndbwriters
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
 				python3 experiment.py $2 $1
 				((filesize=filesize+10))
@@ -48,9 +45,6 @@ runExperiments(){
 				((filesize=filesize+10))
 				((nshadows=nshadows-25))
 				((ndbwriters=ndbwriters-5))
-				echo $filesize
-				echo $nshadows
-				echo $ndbwriters
 			done
 		elif [ $3 -eq 3 ];then
 			for i in {1..5};do
@@ -59,9 +53,6 @@ runExperiments(){
 				((filesize=filesize+10))
 				((nshadows=nshadows+25))
 				((ndbwriters=ndbwriters-5))
-				echo $filesize
-				echo $nshadows
-				echo $ndbwriters
 			done
 		elif [ $3 -eq 4 ];then
 			for i in {1..5};do
@@ -70,9 +61,6 @@ runExperiments(){
 				((filesize=filesize+10))
 				((nshadows=nshadows-25))
 				((ndbwriters=ndbwriters+5))
-				echo $filesize
-				echo $nshadows
-				echo $ndbwriters
 			done
 		fi
 
@@ -80,21 +68,21 @@ runExperiments(){
 		
 	elif [ $1 == "randomread" ];then
 		run=10
-		filesize=5000
+		filesize=5000	# GB
 		nthreads=1
 		/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
 		python3 experiment.py $2 $1
 
 	elif [ $1 == "randomwrite" ];then
 		run=10
-		filesize=5000
+		filesize=5000	# GB
 		nthreads=1
 		/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
 		python3 experiment.py $2 $1
 
 	elif [ $1 == "singlestreamread" ];then
 		run=10
-		filesize=5000
+		filesize=5000	# GB
 		nthreads=1
 		/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
 		python3 experiment.py $2 $1
@@ -107,21 +95,21 @@ runExperiments(){
 
 	elif [ $1 == "videoserver" ];then
 		run=10
-		filesize=10000
+		filesize=10000	# GB
 		nthreads=48
 		/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
 		python3 experiment.py $2 $1
 
 	elif [ $1 == "webproxy" ];then
 		run=10
-		meanfilesize=16
+		meanfilesize=16	  # KB
 		nthreads=100
 		/bin/bash ./parameter_handler.sh $1 $run $meanfilesize 0 $nthreads 0 0
 		python3 experiment.py $2 $1
 
 	elif [ $1 == "webserver" ];then
 		run=10
-		filesize=16
+		filesize=16	# KB
 		nthreads=100
 		/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreadas 0 0
 		python3 experiment.py $2 $1
