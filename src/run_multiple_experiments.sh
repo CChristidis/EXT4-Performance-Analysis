@@ -7,42 +7,10 @@ path="/root/workloads/$1.f"
 
 # $2: chosen personality
 
-/bin/bash ./preparation.sh
+# $3: oltp flag. if $3 -eq 1 -> nshadows and ndbwriters increase. if $3 -eq 2 -> nshadows and ndbwriters decrease
+# if $3 -eq 3 -> nshadows increase and ndbwriters decrease. if $3 -eq 4 -> nshadows decrease and ndbwriters increase.
 
-init_parameters(){
-		
-
-	if [ $1 == "fileserver" ];then
-		/bin/bash ./parameter_handler.sh $1 10 0 128 50 0 0
-
-	elif [ $1 == "oltp" ];then
-		/bin/bash ./parameter_handler.sh $1 10 0 10 0 200 10
-
-	elif [ $1 == "randomread" ];then
-		/bin/bash ./parameter_handler.sh $1 10 0 5000 1 0 0
-
-	elif [ $1 == "randomwrite" ];then
-		/bin/bash ./parameter_handler.sh $1 10 0 5000 1 0 0
-
-	elif [ $1 == "singlestreamread" ];then
-		/bin/bash ./parameter_handler.sh $1 10 0 5000 1 0 0
-
-	elif [ $1 == "singlestreamwrite" ];then
-		/bin/bash ./parameter_handler.sh $1 10 0 0 1 0 0
-
-	elif [ $1 == "videoserver" ];then
-		/bin/bash ./parameter_handler.sh $1 10 0 10000 48 0 0
-
-	elif [ $1 == "webproxy" ];then
-		/bin/bash ./parameter_handler.sh $1 10 16 0 100 0 0
-
-	elif [ $1 == "webserver" ];then
-		/bin/bash ./parameter_handler.sh $1 10 0 16 100 0 0
-
-	else
-		echo "<filebench personality options> : {fileserver, oltp, randomread, randomwrite, singlestreamread, singlestreamwrite, varmail, videoserver, webproxy, webserver}"
-	fi
-}
+/bin/bash ./preparation.sh 
 
 
 runExperiments(){
@@ -58,12 +26,58 @@ runExperiments(){
 
 	elif [ $1 == "oltp" ];then
 		run=10
-		filesize=10
+		filesize=10  # MB
 		nshadows=200
-		ndbwriters=10
-		/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
-		python3 experiment.py $2 $1
+		ndbwriters=25
+		
+		if [ $3 -eq 1 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
+				python3 experiment.py $2 $1
+				((filesize=filesize+10))
+				((nshadows=nshadows+25))
+				((ndbwriters=ndwriters+5))
+				echo $filesize"
+				echo "$nshadows"
+				echo $ndbwriters"
+			done
+		elif [ $3 -eq 2 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
+				python3 experiment.py $2 $1
+				((filesize=filesize+10))
+				((nshadows=nshadows-25))
+				((ndbwriters=ndwriters-5))
+				echo $filesize"
+				echo "$nshadows"
+				echo $ndbwriters"
+			done
+		elif [ $3 -eq 3 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
+				python3 experiment.py $2 $1
+				((filesize=filesize+10))
+				((nshadows=nshadows+25))
+				((ndbwriters=ndwriters-5))
+				echo $filesize"
+				echo "$nshadows"
+				echo $ndbwriters"
+			done
+		elif [ $3 -eq 4 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
+				python3 experiment.py $2 $1
+				((filesize=filesize+10))
+				((nshadows=nshadows-25))
+				((ndbwriters=ndwriters+5))
+				echo $filesize"
+				echo "$nshadows"
+				echo $ndbwriters"
+			done
+		fi
 
+				
+		
 	elif [ $1 == "randomread" ];then
 		run=10
 		filesize=5000
@@ -118,13 +132,6 @@ runExperiments(){
 	
 	echo "$(column -s, -t --table-columns 95%_conf_interval,std_dev,mean,throughput,filesize,filesize_mean,meanfilesize,nthreads,nshadows,ndbwriters /root/Desktop/experiment_stats.txt)" > /root/Desktop/experiment_stats.txt
 }
-
-
-
-
-
-
-
 
 
 # init_parameters $2
