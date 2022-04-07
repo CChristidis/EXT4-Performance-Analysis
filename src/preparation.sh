@@ -28,6 +28,7 @@ makePreparations(){
 	fi	
 }
 
+
 printExperimentScriptSyntax(){
 	printf "\n"
 	echo "----------------------- Experiment script's syntax -----------------------"
