@@ -29,17 +29,17 @@ runExperiments(){
 		filesize=10  # MB
 		nshadows=200
 		ndbwriters=25
-		
 		if [ $3 -eq 1 ];then
 			for i in {1..5};do
+				echo $filesize
+				echo $nshadows
+				echo $ndbwriters
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
 				python3 experiment.py $2 $1
 				((filesize=filesize+10))
 				((nshadows=nshadows+25))
-				((ndbwriters=ndwriters+5))
-				echo $filesize"
-				echo "$nshadows"
-				echo $ndbwriters"
+				((ndbwriters=ndbwriters+5))
+				
 			done
 		elif [ $3 -eq 2 ];then
 			for i in {1..5};do
@@ -47,10 +47,10 @@ runExperiments(){
 				python3 experiment.py $2 $1
 				((filesize=filesize+10))
 				((nshadows=nshadows-25))
-				((ndbwriters=ndwriters-5))
-				echo $filesize"
-				echo "$nshadows"
-				echo $ndbwriters"
+				((ndbwriters=ndbwriters-5))
+				echo $filesize
+				echo $nshadows
+				echo $ndbwriters
 			done
 		elif [ $3 -eq 3 ];then
 			for i in {1..5};do
@@ -58,10 +58,10 @@ runExperiments(){
 				python3 experiment.py $2 $1
 				((filesize=filesize+10))
 				((nshadows=nshadows+25))
-				((ndbwriters=ndwriters-5))
-				echo $filesize"
-				echo "$nshadows"
-				echo $ndbwriters"
+				((ndbwriters=ndbwriters-5))
+				echo $filesize
+				echo $nshadows
+				echo $ndbwriters
 			done
 		elif [ $3 -eq 4 ];then
 			for i in {1..5};do
@@ -69,10 +69,10 @@ runExperiments(){
 				python3 experiment.py $2 $1
 				((filesize=filesize+10))
 				((nshadows=nshadows-25))
-				((ndbwriters=ndwriters+5))
-				echo $filesize"
-				echo "$nshadows"
-				echo $ndbwriters"
+				((ndbwriters=ndbwriters+5))
+				echo $filesize
+				echo $nshadows
+				echo $ndbwriters
 			done
 		fi
 
@@ -136,4 +136,5 @@ runExperiments(){
 
 # init_parameters $2
 runExperiments $2 $1 $3
+
 
