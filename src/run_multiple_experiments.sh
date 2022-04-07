@@ -7,7 +7,7 @@ path="/root/workloads/$1.f"
 
 # $2: chosen personality
 
-# $3: oltp flag. if $3 -eq 1 -> nshadows and ndbwriters increase. if $3 -eq 2 -> nshadows and ndbwriters decrease
+# $3: Experiment type flag. e.g. for oltp: if $3 -eq 1 -> nshadows and ndbwriters increase. if $3 -eq 2 -> nshadows and ndbwriters decrease
 # if $3 -eq 3 -> nshadows increase and ndbwriters decrease. if $3 -eq 4 -> nshadows decrease and ndbwriters increase.
 
 /bin/bash ./preparation.sh 
@@ -20,9 +20,36 @@ runExperiments(){
 		run=10
 		filesize=128	# KB
 		nthreads=50
-		# we'll place a for here to update the parameters and run experiment.py multiple times.
-		/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-		python3 experiment.py $2 $1
+		if [ $3 -eq 1 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize*2))
+				((nthreads=nthreads+10))		
+			done
+		elif [ $3 -eq 2 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize/2))
+				((nthreads=nthreads-10))		
+			done
+		elif [ $3 -eq 3 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize*2))
+				((nthreads=nthreads-10))		
+			done
+		elif [ $3 -eq 4 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize/2))
+				((nthreads=nthreads+10))		
+			done
+		fi
+		
 
 	elif [ $1 == "oltp" ];then
 		run=10
@@ -62,63 +89,204 @@ runExperiments(){
 				((nshadows=nshadows-25))
 				((ndbwriters=ndbwriters+5))
 			done
+		elif [ $3 -eq 5 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
+				python3 experiment.py $2 $1
+				((filesize=filesize-2))
+				((nshadows=nshadows+25))
+				((ndbwriters=ndbwriters+5))
+				
+			done
+		elif [ $3 -eq 6 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
+				python3 experiment.py $2 $1
+				((filesize=filesize-2)
+				((nshadows=nshadows-25))
+				((ndbwriters=ndbwriters-5))
+			done
+		elif [ $3 -eq 7 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
+				python3 experiment.py $2 $1
+				((filesize=filesize-2))
+				((nshadows=nshadows+25))
+				((ndbwriters=ndbwriters-5))
+			done
+		elif [ $3 -eq 8 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
+				python3 experiment.py $2 $1
+				((filesize=filesize-2))
+				((nshadows=nshadows-25))
+				((ndbwriters=ndbwriters+5))
+			done
 		fi
 
 				
 		
-	elif [ $1 == "randomread" ];then
+	elif [ $1 == "randomread" ] || [$1 == "randomwrite"] || [$1 == "singlestreamread"];then
 		run=10
 		filesize=5000	# GB
-		nthreads=1
-		/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-		python3 experiment.py $2 $1
-
-	elif [ $1 == "randomwrite" ];then
-		run=10
-		filesize=5000	# GB
-		nthreads=1
-		/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-		python3 experiment.py $2 $1
-
-	elif [ $1 == "singlestreamread" ];then
-		run=10
-		filesize=5000	# GB
-		nthreads=1
-		/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-		python3 experiment.py $2 $1
+		nthreads=50
+		
+		if [ $3 -eq 1 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize+1000))
+				((nthreads=nthreads+10))		
+			done
+		elif [ $3 -eq 2 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize-1000))
+				((nthreads=nthreads-10))		
+			done
+		elif [ $3 -eq 3 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize+1000))
+				((nthreads=nthreads-10))		
+			done
+		elif [ $3 -eq 4 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize-1000))
+				((nthreads=nthreads+10))		
+			done
+		fi
 
 	elif [ $1 == "singlestreamwrite" ];then
 		run=10
-		nthreads=1
-		/bin/bash ./parameter_handler.sh $1 $run 0 0 $nthreads 0 0
-		python3 experiment.py $2 $1
+		nthreads=50
+		if [ $3 -eq 1 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 0 $nthreads 0 0
+				python3 experiment.py $2 $1
+				((nthreads=nthreads+10))		
+			done
+		elif [ $3 -eq 2 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 0 $nthreads 0 0
+				python3 experiment.py $2 $1
+				((nthreads=nthreads-10))		
+			done
+		fi
 
 	elif [ $1 == "videoserver" ];then
 		run=10
 		filesize=10000	# GB
-		nthreads=48
-		/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-		python3 experiment.py $2 $1
+		nthreads=50
+		if [ $3 -eq 1 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize+2000))
+				((nthreads=nthreads+10))		
+			done
+		elif [ $3 -eq 2 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize-2000))
+				((nthreads=nthreads-10))		
+			done
+		elif [ $3 -eq 3 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize+2000))
+				((nthreads=nthreads-10))		
+			done
+		elif [ $3 -eq 4 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize-2000))
+				((nthreads=nthreads+10))		
+			done
+		fi
 
 	elif [ $1 == "webproxy" ];then
 		run=10
 		meanfilesize=16	  # KB
 		nthreads=100
-		/bin/bash ./parameter_handler.sh $1 $run $meanfilesize 0 $nthreads 0 0
-		python3 experiment.py $2 $1
+		if [ $3 -eq 1 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run $meanfilesize 0 $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize+3))
+				((nthreads=nthreads+20))		
+			done
+		elif [ $3 -eq 2 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run $meanfilesize 0 $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize-3))
+				((nthreads=nthreads-20))		
+			done
+		elif [ $3 -eq 3 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run $meanfilesize 0 $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize+3))
+				((nthreads=nthreads-20))		
+			done
+		elif [ $3 -eq 4 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run $meanfilesize 0 $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize-3))
+				((nthreads=nthreads+20))		
+			done
+		fi
+		
 
 	elif [ $1 == "webserver" ];then
 		run=10
 		filesize=16	# KB
 		nthreads=100
-		/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreadas 0 0
-		python3 experiment.py $2 $1
+		if [ $3 -eq 1 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize+3))
+				((nthreads=nthreads+20))		
+			done
+		elif [ $3 -eq 2 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize-3))
+				((nthreads=nthreads-20))		
+			done
+		elif [ $3 -eq 3 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize+3))
+				((nthreads=nthreads-20))		
+			done
+		elif [ $3 -eq 4 ];then
+			for i in {1..5};do
+				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
+				python3 experiment.py $2 $1
+				((filesize=filesize-3))
+				((nthreads=nthreads+20))		
+			done
+		fi
 
 	else
 		echo "<filebench personality options> : {fileserver, oltp, randomread, randomwrite, singlestreamread, singlestreamwrite, varmail, videoserver, webproxy, webserver}"
 	fi
 	
 	echo "$(column -s, -t --table-columns 95%_conf_interval,std_dev,mean,throughput,filesize,filesize_mean,meanfilesize,nthreads,nshadows,ndbwriters /root/Desktop/experiment_stats.txt)" > /root/Desktop/experiment_stats.txt
+	# plot here
 }
 
 
