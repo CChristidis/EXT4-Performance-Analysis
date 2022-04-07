@@ -166,7 +166,7 @@ def runExperiment():
         printScriptSyntax()
 
 
-    while need_more_runs and runs < 3:
+    while need_more_runs and runs < 10:
         os.system("/bin/bash /root/scripts/start-disk.sh ext4-" + ext4_mount_options[0])
         # subprocess.call(["/root/scripts/start-disk.sh", " ext4-" + ext4_mount_options[0]])
         # Start a clean filesystem
