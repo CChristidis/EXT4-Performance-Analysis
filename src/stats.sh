@@ -36,6 +36,6 @@ ndbwriters=$((ndbwriters/1))
 echo "$2, $3, $4, $5, $filesize, $filesize_with_mean, $meanfilesize, $nthreads, $nshadows, $ndbwriters" >> /root/Desktop/experiment_stats.txt
 
 # we'll use this later, maybe in the final script, right before we plot stuff.
-# echo "$(column -s, -t --table-columns 95%_conf_interval,std_dev,mean,throughput,filesize,filesize_mean,meanfilesize,nthreads,nshadows,ndbwriters /root/Desktop/experiment_stats.txt)" > /root/Desktop/experiment_stats.txt
+# 
 
 
