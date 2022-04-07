@@ -31,7 +31,7 @@ def plot_everything(path: str):
 		if sum(stat) == 0:
 			continue
 
-		plt.title("Metric: " + sys.argv[2], Personality: " + sys.argv[3]")
+		plt.title("Metric: " + sys.argv[2], ".Personality: " + sys.argv[3])
 		plt.xlabel(xlabel)
 		plt.ylabel(ylabel)
 		plt.plot(stat, throughput)
