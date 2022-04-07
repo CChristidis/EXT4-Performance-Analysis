@@ -9,7 +9,7 @@ path="/root/workloads/$1.f"
 
 # $3: Experiment type flag. e.g. for oltp: if $3 -eq 1 -> nshadows and ndbwriters increase. if $3 -eq 2 -> nshadows and ndbwriters decrease
 # if $3 -eq 3 -> nshadows increase and ndbwriters decrease. if $3 -eq 4 -> nshadows decrease and ndbwriters increase.
-
+# flags 5, 6, 7, 8 correspond only to oltp personality option and decrease the filesize parameter.
 /bin/bash ./preparation.sh 
 
 
@@ -102,7 +102,7 @@ runExperiments(){
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
 				python3 experiment.py $2 $1
-				((filesize=filesize-2)
+				((filesize=filesize-2))
 				((nshadows=nshadows-25))
 				((ndbwriters=ndbwriters-5))
 			done
