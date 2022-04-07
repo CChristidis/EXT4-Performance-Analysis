@@ -135,6 +135,6 @@ runExperiments(){
 
 
 # init_parameters $2
-runExperiments $2 $1
+runExperiments $2 $1 $3
 
 
