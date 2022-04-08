@@ -126,7 +126,7 @@ runExperiments(){
 
 				
 		
-	elif [ $1 == "randomread" ] || [$1 == "randomwrite"] || [$1 == "singlestreamread"];then
+	elif [ $1 == "randomread" ] || [ $1 == "randomwrite" ] || [ $1 == "singlestreamread" ];then
 		run=10
 		filesize=5000	# GB
 		nthreads=50
