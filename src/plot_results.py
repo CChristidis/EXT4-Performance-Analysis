@@ -38,7 +38,7 @@ def plot_everything(path: str):
 		plt.show()
 
 	mean = [line[2] for line in lines]
-	ylabel = throughput[0]
+	ylabel = mean[0]
 	mean = [float(elem) for idx, elem in enumerate(mean) if idx > 0]
 
 	for i in range(len(lines[0])):
