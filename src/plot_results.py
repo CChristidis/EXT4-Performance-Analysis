@@ -34,9 +34,10 @@ def plot_everything(path: str):
 		plt.title("Metric: " + sys.argv[2] + ". Personality: " + sys.argv[3])
 		plt.xlabel(xlabel)
 		plt.ylabel(ylabel)
+		plt.savefig(ylabel + "_" + xlabel + ".jpg")
 		plt.plot(stat, throughput)
 		plt.show()
-		plt.savefig(ylabel + "_" + xlabel + ".png")
+
 
 
 	mean = [line[2] for line in lines]
@@ -65,9 +66,10 @@ def plot_everything(path: str):
 		plt.title("Metric: " + sys.argv[2] + ". Personality: " + sys.argv[3])
 		plt.xlabel(xlabel)
 		plt.ylabel(ylabel)
+		plt.savefig(ylabel + "_" + xlabel + ".jpg")
 		plt.plot(stat, mean)
 		plt.show()
-		plt.savefig(ylabel + "_" + xlabel + ".png")
+		
 
 
 
