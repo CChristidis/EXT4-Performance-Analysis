@@ -71,8 +71,10 @@ def plot_everything(path: str):
 		plt.show()
 		
 
-
-
-if __name__ == "__main__":
+def main():
 	path = sys.argv[1]
 	plot_everything(path)
+
+if __name__ == "__main__":
+	main()
+	
