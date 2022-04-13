@@ -214,6 +214,7 @@ def runExperiment():
 
     tput = get_throughput()
     standard_dev = stdev(chosenMetricList)
+    os.system("clear")
     printStatistics(runs, conf_interval, standard_dev, mean,
                     chosenMetricList, tput)
 
