@@ -223,5 +223,6 @@ def runExperiment():
 
 
 if __name__ == "__main__":
+    os.system("clear")
     os.system("/bin/bash /root/scripts/stop-disk.sh")
     runExperiment()
