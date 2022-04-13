@@ -36,6 +36,8 @@ def plot_everything(path: str):
 		plt.ylabel(ylabel)
 		plt.plot(stat, throughput)
 		plt.show()
+		plt.savefig(ylabel + "_" + xlabel + ".png")
+
 
 	mean = [line[2] for line in lines]
 	ylabel = mean[0]
@@ -65,6 +67,8 @@ def plot_everything(path: str):
 		plt.ylabel(ylabel)
 		plt.plot(stat, mean)
 		plt.show()
+		plt.savefig(ylabel + "_" + xlabel + ".png")
+
 
 
 if __name__ == "__main__":
