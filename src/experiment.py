@@ -219,9 +219,13 @@ def runExperiment():
 
     os.system("/bin/bash /root/Desktop/stats.sh " + chosen_personality + ".f " + str(round(conf_interval, 5)) + " " +
     str(round(standard_dev, 5)) + " " + str(round(mean, 5)) + " " + str(round(float(tput[:len(tput)-4]), 5)))
+    
+    
+def main():
+   os.system("/bin/bash /root/scripts/stop-disk.sh")
+   os.system("clear")
+   runExperiment()
 
-
+    
 if __name__ == "__main__":
-    os.system("/bin/bash /root/scripts/stop-disk.sh")
-    os.system("clear")
-    runExperiment()
+  main()
