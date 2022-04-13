@@ -176,8 +176,7 @@ def runExperiment():
         call_vmstat('/tmp/vmstat.out', vmstat_options)
 
         # free slab objects and page cache
-        with open('/proc/sys/vm/drop_caches', "w") as outfile:
-            subprocess.run(["echo", "3"], stdout=outfile)
+        os.system("echo 3 > /proc/sys/vm/drop_caches")
 
         # execute filebench personality
         call_filebench('/tmp/results', chosen_personality)
