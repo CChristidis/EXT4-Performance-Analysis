@@ -7,6 +7,27 @@ def get_lines(path: str):
     lines = [line.split() for line in file if len(line.split()) == 18]
     return lines
 
+def add_unit_to_xlabel(xlabel, i):
+    if i == 4:
+        xlabel = xlabel + " (in MB)"
+    elif i == 5:
+        xlabel = xlabel + " (in KB)"
+    elif i == 6:
+        xlabel = xlabel + " (in KB)"
+    elif i == 10:
+        xlabel = xlabel + " (number of CPUs utilized)"
+    elif i in (11, 13, 16):
+        xlabel = xlabel + " (in MB/sec)"
+    elif i == 12:
+        xlabel = xlabel + " (in KB/sec)"
+    elif i == 14:
+        xlabel = xlabel + " (in GHz)"
+    elif i == 15:
+        xlabel = xlabel + " (in instructions per cycle)"
+    elif i == 17:
+        xlabel = xlabel + " (percentage of all branches)"
+
+    return xlabel
 
 def plot_everything(path: str):
     lines = get_lines(path)
@@ -21,12 +42,7 @@ def plot_everything(path: str):
         stat = [line[i] for line in lines]
         xlabel = stat[0]
 
-        if i == 4:
-            xlabel = xlabel + " (in MB)"
-        elif i == 5:
-            xlabel = xlabel + " (in KB)"
-        elif i == 6:
-            xlabel = xlabel + " (in KB)"
+        xlabel = add_unit_to_xlabel(xlabel, i)
 
         stat = [float(elem) for idx, elem in enumerate(stat) if idx > 0]
 
@@ -36,8 +52,12 @@ def plot_everything(path: str):
         plt.title("Metric: " + sys.argv[2] + ". Personality: " + sys.argv[3])
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
-        plt.savefig(ylabel + "_" + xlabel + ".jpg")
         plt.plot(stat, throughput)
+        
+        if '/' in xlabel:
+            xlabel = xlabel.replace('/', '_')
+
+        plt.savefig(ylabel + "_" + xlabel + ".jpg")
         plt.show()
 
     mean = [line[2] for line in lines]
@@ -51,12 +71,7 @@ def plot_everything(path: str):
         stat = [line[i] for line in lines]
         xlabel = stat[0]
 
-        if i == 4:
-            xlabel = xlabel + " (in MB)"
-        elif i == 5:
-            xlabel = xlabel + " (in KB)"
-        elif i == 6:
-            xlabel = xlabel + " (in KB)"
+        xlabel = add_unit_to_xlabel(xlabel, i)
 
         stat = [float(elem) for idx, elem in enumerate(stat) if idx > 0]
 
@@ -66,9 +81,15 @@ def plot_everything(path: str):
         plt.title("Metric: " + sys.argv[2] + ". Personality: " + sys.argv[3])
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
-        plt.savefig(ylabel + "_" + xlabel + ".jpg")
+        #
         plt.plot(stat, mean)
+
+        if '/' in xlabel:
+            xlabel = xlabel.replace('/', '_')
+
+        plt.savefig(ylabel + "_" + xlabel + ".jpg")
         plt.show()
+
 
 
 def main():

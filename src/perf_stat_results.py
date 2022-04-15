@@ -34,7 +34,8 @@ def main(*args):
 	lines = clear_unwanted_lines(lines)
 	results = get_perfstat_numbers(lines)
 	results_str = str(results)
-	os.system("sed '1 s/.*/&, " + results_str + "/' experiment_stats.txt")
+	# print("sed ' 1 s/.*/&, " + results_str + "/' experiment_stats.txt")
+	os.system("sed ' $ s/.*/&, " + results_str + "/' experiment_stats_temp.txt >> experiment_stats.txt")
 
 
 

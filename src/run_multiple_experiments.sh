@@ -287,8 +287,10 @@ runExperiments(){
 	else
 		echo "<filebench personality options> : {fileserver, oltp, randomread, randomwrite, singlestreamread, singlestreamwrite, varmail, videoserver, webproxy, webserver}"
 	fi
+
 	
-	echo "$(column -s, -t --table-columns 95%_conf_interval,std_dev,mean,throughput,filesize,filesize_mean,meanfilesize,nthreads,nshadows,ndbwriters /root/Desktop/experiment_stats.txt)" > /root/Desktop/experiment_stats.txt
+
+	echo "$(column -s, -t --table-columns 95%_conf_interval,std_dev,mean,throughput,filesize,filesize_mean,meanfilesize,nthreads,nshadows,ndbwriters,task-clock,context-switches,cpu-migrations,page-faults,cycles,instructions,branches,branch-misses /root/Desktop/experiment_stats.txt)" > /root/Desktop/experiment_stats.txt
 	# plot here
 	python3 plot_results.py /root/Desktop/experiment_stats.txt $2 $1
 }

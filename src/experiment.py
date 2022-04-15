@@ -176,7 +176,8 @@ def runExperiment():
         call_vmstat('/tmp/vmstat.out', vmstat_options)
 
         # free slab objects and page cache
-        os.system("echo 3 > /proc/sys/vm/drop_caches")
+        with open('/proc/sys/vm/drop_caches', "w") as outfile:
+            subprocess.run(["echo", "3"], stdout=outfile)
 
         # execute filebench personality
         call_filebench('/tmp/results', chosen_personality)
@@ -219,13 +220,9 @@ def runExperiment():
 
     os.system("/bin/bash /root/Desktop/stats.sh " + chosen_personality + ".f " + str(round(conf_interval, 5)) + " " +
     str(round(standard_dev, 5)) + " " + str(round(mean, 5)) + " " + str(round(float(tput[:len(tput)-4]), 5)))
-    
-    
-def main():
-   os.system("/bin/bash /root/scripts/stop-disk.sh")
-   os.system("clear")
-   runExperiment()
 
-    
+
 if __name__ == "__main__":
-  main()
+    os.system("/bin/bash /root/scripts/stop-disk.sh")
+    os.system("clear")
+    runExperiment()

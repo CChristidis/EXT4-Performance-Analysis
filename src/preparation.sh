@@ -2,6 +2,9 @@
 
 declare -a WORKLOAD_FILES
 
+chmod 755 ./run_multiple_experiments.sh
+chmod 755 ./stats.sh
+chmod 755 ./parameter_handler.sh
 
 WORKLOAD_FILES=(/root/filebench-1.5-alpha3/workloads/singlestreamread.f
 		/root/filebench-1.5-alpha3/workloads/singlestreamwrite.f
@@ -18,6 +21,7 @@ makePreparations(){
 
 	# clear stats file.
 	> /root/Desktop/experiment_stats_temp.txt
+	> /root/Desktop/experiment_stats.txt
 
 	echo "500" >> "/proc/sys/vm/dirty_expire_centisecs"
 	echo "100" >> "/proc/sys/vm/dirty_writeback_centisecs"

@@ -33,7 +33,7 @@ ndbwriters=$((ndbwriters/1))
 # $4: mean
 # $5: throughput
 
-echo "$2, $3, $4, $5, $filesize, $filesize_with_mean, $meanfilesize, $nthreads, $nshadows, $ndbwriters" >> /root/Desktop/experiment_stats.txt
+echo "$2, $3, $4, $5, $filesize, $filesize_with_mean, $meanfilesize, $nthreads, $nshadows, $ndbwriters" >> /root/Desktop/experiment_stats_temp.txt
 
 # we'll use this later, maybe in the final script, right before we plot stuff.
 # 
