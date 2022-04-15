@@ -25,7 +25,6 @@ runExperiments(){
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
 				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
 				python3 perf_stat_results.py
-				# python3 experiment.py $2 $1
 				((filesize=filesize*2))
 				((nthreads=nthreads+10))		
 			done
@@ -40,14 +39,16 @@ runExperiments(){
 		elif [ $3 -eq 3 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize*2))
 				((nthreads=nthreads-10))		
 			done
 		elif [ $3 -eq 4 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize/2))
 				((nthreads=nthreads+10))		
 			done
@@ -62,7 +63,8 @@ runExperiments(){
 		if [ $3 -eq 1 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize+10))
 				((nshadows=nshadows+25))
 				((ndbwriters=ndbwriters+5))
@@ -71,7 +73,8 @@ runExperiments(){
 		elif [ $3 -eq 2 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize+10))
 				((nshadows=nshadows-25))
 				((ndbwriters=ndbwriters-5))
@@ -79,7 +82,8 @@ runExperiments(){
 		elif [ $3 -eq 3 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize+10))
 				((nshadows=nshadows+25))
 				((ndbwriters=ndbwriters-5))
@@ -87,7 +91,8 @@ runExperiments(){
 		elif [ $3 -eq 4 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize+10))
 				((nshadows=nshadows-25))
 				((ndbwriters=ndbwriters+5))
@@ -95,7 +100,8 @@ runExperiments(){
 		elif [ $3 -eq 5 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize-2))
 				((nshadows=nshadows+25))
 				((ndbwriters=ndbwriters+5))
@@ -104,7 +110,8 @@ runExperiments(){
 		elif [ $3 -eq 6 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize-2))
 				((nshadows=nshadows-25))
 				((ndbwriters=ndbwriters-5))
@@ -112,7 +119,8 @@ runExperiments(){
 		elif [ $3 -eq 7 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize-2))
 				((nshadows=nshadows+25))
 				((ndbwriters=ndbwriters-5))
@@ -120,7 +128,8 @@ runExperiments(){
 		elif [ $3 -eq 8 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize 0 $nshadows $ndbwriters
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize-2))
 				((nshadows=nshadows-25))
 				((ndbwriters=ndbwriters+5))
@@ -137,28 +146,32 @@ runExperiments(){
 		if [ $3 -eq 1 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize+1000))
 				((nthreads=nthreads+10))		
 			done
 		elif [ $3 -eq 2 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize-1000))
 				((nthreads=nthreads-10))		
 			done
 		elif [ $3 -eq 3 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize+1000))
 				((nthreads=nthreads-10))		
 			done
 		elif [ $3 -eq 4 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize-1000))
 				((nthreads=nthreads+10))		
 			done
@@ -170,13 +183,15 @@ runExperiments(){
 		if [ $3 -eq 1 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 0 $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((nthreads=nthreads+10))		
 			done
 		elif [ $3 -eq 2 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 0 $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((nthreads=nthreads-10))		
 			done
 		fi
@@ -188,28 +203,32 @@ runExperiments(){
 		if [ $3 -eq 1 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize+2000))
 				((nthreads=nthreads+10))		
 			done
 		elif [ $3 -eq 2 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize-2000))
 				((nthreads=nthreads-10))		
 			done
 		elif [ $3 -eq 3 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize+2000))
 				((nthreads=nthreads-10))		
 			done
 		elif [ $3 -eq 4 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize-2000))
 				((nthreads=nthreads+10))		
 			done
@@ -222,28 +241,32 @@ runExperiments(){
 		if [ $3 -eq 1 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run $meanfilesize 0 $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize+3))
 				((nthreads=nthreads+20))		
 			done
 		elif [ $3 -eq 2 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run $meanfilesize 0 $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize-3))
 				((nthreads=nthreads-20))		
 			done
 		elif [ $3 -eq 3 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run $meanfilesize 0 $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize+3))
 				((nthreads=nthreads-20))		
 			done
 		elif [ $3 -eq 4 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run $meanfilesize 0 $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize-3))
 				((nthreads=nthreads+20))		
 			done
@@ -257,28 +280,32 @@ runExperiments(){
 		if [ $3 -eq 1 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize+3))
 				((nthreads=nthreads+20))		
 			done
 		elif [ $3 -eq 2 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize-3))
 				((nthreads=nthreads-20))		
 			done
 		elif [ $3 -eq 3 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize+3))
 				((nthreads=nthreads-20))		
 			done
 		elif [ $3 -eq 4 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
-				python3 experiment.py $2 $1
+				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
+				python3 perf_stat_results.py
 				((filesize=filesize-3))
 				((nthreads=nthreads+20))		
 			done
