@@ -81,7 +81,7 @@ def plot_everything(path: str):
         plt.title("Metric: " + sys.argv[2] + ". Personality: " + sys.argv[3])
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
-        #
+  
         plt.plot(stat, mean)
 
         if '/' in xlabel:
