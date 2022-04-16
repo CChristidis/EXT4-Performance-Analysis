@@ -25,7 +25,7 @@ runExperiments(){
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
 				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
 				python3 perf_stat_results.py
-				((filesize=filesize+128))
+				((filesize=filesize+20))
 				((nthreads=nthreads+10))		
 			done
 		elif [ $3 -eq 2 ];then
