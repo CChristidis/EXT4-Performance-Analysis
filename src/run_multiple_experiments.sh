@@ -198,39 +198,39 @@ runExperiments(){
 
 	elif [ $1 == "videoserver" ];then
 		run=10
-		filesize=50	# GB
-		nthreads=50
+		filesize=16	# GB
+		nthreads=16
 		if [ $3 -eq 1 ];then
 			for i in {1..15};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
 				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
 				python3 perf_stat_results.py
-				((filesize=filesize+3))
-				((nthreads=nthreads+3))		
+				((filesize=filesize+1))
+				((nthreads=nthreads+1))		
 			done
 		elif [ $3 -eq 2 ];then
 			for i in {1..15};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
 				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
 				python3 perf_stat_results.py
-				((filesize=filesize-3))
-				((nthreads=nthreads-3))		
+				((filesize=filesize-1))
+				((nthreads=nthreads-1))		
 			done
 		elif [ $3 -eq 3 ];then
 			for i in {1..15};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
 				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
 				python3 perf_stat_results.py
-				((filesize=filesize+3))
-				((nthreads=nthreads-3))		
+				((filesize=filesize+1))
+				((nthreads=nthreads-1))		
 			done
 		elif [ $3 -eq 4 ];then
 			for i in {1..15};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
 				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
 				python3 perf_stat_results.py
-				((filesize=filesize-3))
-				((nthreads=nthreads+3))		
+				((filesize=filesize-1))
+				((nthreads=nthreads+1))		
 			done
 		fi
 
