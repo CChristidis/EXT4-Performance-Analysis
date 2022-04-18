@@ -198,14 +198,14 @@ runExperiments(){
 
 	elif [ $1 == "videoserver" ];then
 		run=10
-		filesize=10000	# GB
+		filesize=1000	# GB
 		nthreads=50
 		if [ $3 -eq 1 ];then
 			for i in {1..5};do
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
 				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
 				python3 perf_stat_results.py
-				((filesize=filesize+2000))
+				((filesize=filesize+200))
 				((nthreads=nthreads+10))		
 			done
 		elif [ $3 -eq 2 ];then
@@ -213,7 +213,7 @@ runExperiments(){
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
 				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
 				python3 perf_stat_results.py
-				((filesize=filesize-2000))
+				((filesize=filesize-200))
 				((nthreads=nthreads-10))		
 			done
 		elif [ $3 -eq 3 ];then
@@ -221,7 +221,7 @@ runExperiments(){
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
 				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
 				python3 perf_stat_results.py
-				((filesize=filesize+2000))
+				((filesize=filesize+200))
 				((nthreads=nthreads-10))		
 			done
 		elif [ $3 -eq 4 ];then
@@ -229,7 +229,7 @@ runExperiments(){
 				/bin/bash ./parameter_handler.sh $1 $run 0 $filesize $nthreads 0 0
 				perf stat python3 experiment.py $2 $1 2> perf_stat_results.txt
 				python3 perf_stat_results.py
-				((filesize=filesize-2000))
+				((filesize=filesize-200))
 				((nthreads=nthreads+10))		
 			done
 		fi
