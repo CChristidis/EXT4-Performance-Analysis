@@ -224,7 +224,7 @@ def runExperiment():
                     chosenMetricList, tput)
 
     os.system("/bin/bash /root/Desktop/stats.sh " + chosen_personality + ".f " + str(round(conf_interval, 5)) + " " +
-    str(round(standard_dev, 5)) + " " + str(round(mean, 5)) + " " + str(round(tput, 5))
+    str(round(standard_dev, 5)) + " " + str(round(mean, 5)) + " " + str(round(tput, 5)))
 
 def main():
     os.system("/bin/bash /root/scripts/stop-disk.sh")
