@@ -26,7 +26,7 @@ def printStatistics(runs, final_metric_conf_interval, final_metric_stdev, final_
     print("Standard deviation = {}\n".format(round(final_metric_stdev, 5)))
     print("Mean = {}\n".format(round(final_metric_mean), 5))
     print("Sample list: {}\n".format(chosenMetricList))
-    print("Throughput = {}".format(throughput))
+    print("Mean throughput = {}".format(throughput))
     print("-----------------------------------------------------------------------")
     print("\n" * 1)
 
@@ -126,7 +126,8 @@ def runExperiment():
     io_kB_written = []
 
     chosenMetricList = []
-
+  
+    meanThroughputList = []
     try:
         if sys.argv[1] == "usr_avg":
             chosenMetricList = cpu_usr_avg
@@ -181,6 +182,9 @@ def runExperiment():
 
         # execute filebench personality
         call_filebench('/tmp/results', chosen_personality)
+        
+        meanThroughputList.append(get_throughput())
+        
         # update mpstat result variables
         mpstat_results_tuple = read_mpstat_results(cpu_usr_avg, cpu_sys_avg, cpu_iostat_avg)
         cpu_usr_avg = mpstat_results_tuple[0]
@@ -201,7 +205,7 @@ def runExperiment():
         io_kB_write_rate = iostat_results_tuple[2]
         io_kB_read = iostat_results_tuple[3]
         io_kB_written = iostat_results_tuple[4]
-
+        
         runs += 1
         if runs > 1:
             conf_interval = calculate_95_conf_interval(chosenMetricList)
@@ -212,7 +216,7 @@ def runExperiment():
         os.system("/bin/bash /root/scripts/stop-disk.sh")
         # subprocess.call(["/bin/bash", "/root/scripts/stop-disk.sh"])
 
-    tput = get_throughput()
+    tput = sum(meanThroughputList) / len(meanThroughputList)
     standard_dev = stdev(chosenMetricList)
     os.system("clear")
     printStatistics(runs, conf_interval, standard_dev, mean,
