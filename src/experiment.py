@@ -210,7 +210,7 @@ def runExperiment():
         runs += 1
         if runs > 1:
             conf_interval = calculate_95_conf_interval(chosenMetricList)
-            mean = sum(chosenMetricList) / len(chosenMetricList)
+            mean = float(sum(chosenMetricList) / len(chosenMetricList))
             # printStatistics(runs, conf_interval, stdev(chosenMetricList), mean, chosenMetricList, get_throughput())
             if (conf_interval / mean) < alpha:
                 need_more_runs = False
