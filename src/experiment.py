@@ -182,8 +182,9 @@ def runExperiment():
 
         # execute filebench personality
         call_filebench('/tmp/results', chosen_personality)
+        aux_tput = get_throughput()
         
-        meanThroughputList.append(float(get_throughput()))
+        meanThroughputList.append(float(aux_tput[:len(aux_tput)-4]))
         
         # update mpstat result variables
         mpstat_results_tuple = read_mpstat_results(cpu_usr_avg, cpu_sys_avg, cpu_iostat_avg)
@@ -223,7 +224,7 @@ def runExperiment():
                     chosenMetricList, tput)
 
     os.system("/bin/bash /root/Desktop/stats.sh " + chosen_personality + ".f " + str(round(conf_interval, 5)) + " " +
-    str(round(standard_dev, 5)) + " " + str(round(mean, 5)) + " " + str(round(float(tput[:len(tput)-4]), 5)))
+    str(round(standard_dev, 5)) + " " + str(round(mean, 5)) + " " + str(round(tput, 5))
 
 def main():
     os.system("/bin/bash /root/scripts/stop-disk.sh")
