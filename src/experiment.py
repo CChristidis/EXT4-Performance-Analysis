@@ -183,7 +183,7 @@ def runExperiment():
         # execute filebench personality
         call_filebench('/tmp/results', chosen_personality)
         
-        meanThroughputList.append(get_throughput())
+        meanThroughputList.append(float(get_throughput()))
         
         # update mpstat result variables
         mpstat_results_tuple = read_mpstat_results(cpu_usr_avg, cpu_sys_avg, cpu_iostat_avg)
