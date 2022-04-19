@@ -24,9 +24,9 @@ def printStatistics(runs, final_metric_conf_interval, final_metric_stdev, final_
     print("Number of runs: {}\n".format(runs))
     print("95% confidence interval = {}\n".format(round(final_metric_conf_interval, 5)))
     print("Standard deviation = {}\n".format(round(final_metric_stdev, 5)))
-    print("Mean = {}\n".format(round(final_metric_mean), 5))
+    print("Mean = {}\n".format(float(final_metric_mean)))
     print("Sample list: {}\n".format(chosenMetricList))
-    print("Mean throughput = {}".format(throughput))
+    print("Mean throughput = {}".format(throughput) + " MB/s")
     print("-----------------------------------------------------------------------")
     print("\n" * 1)
 
@@ -167,7 +167,7 @@ def runExperiment():
         printScriptSyntax()
 
 
-    while need_more_runs and runs < 10:
+    while need_more_runs and runs < 15:
         os.system("/bin/bash /root/scripts/start-disk.sh ext4-" + ext4_mount_options[0])
         # subprocess.call(["/root/scripts/start-disk.sh", " ext4-" + ext4_mount_options[0]])
         # Start a clean filesystem
@@ -210,7 +210,7 @@ def runExperiment():
         runs += 1
         if runs > 1:
             conf_interval = calculate_95_conf_interval(chosenMetricList)
-            mean = float(sum(chosenMetricList) / len(chosenMetricList))
+            mean = round(float(sum(chosenMetricList)) / float(len(chosenMetricList)), 5)
             # printStatistics(runs, conf_interval, stdev(chosenMetricList), mean, chosenMetricList, get_throughput())
             if (conf_interval / mean) < alpha:
                 need_more_runs = False
@@ -220,7 +220,7 @@ def runExperiment():
     tput = sum(meanThroughputList) / len(meanThroughputList)
     standard_dev = stdev(chosenMetricList)
     os.system("clear")
-    printStatistics(runs, conf_interval, standard_dev, mean,
+    printStatistics(runs, conf_interval, standard_dev, mean ,
                     chosenMetricList, tput)
 
     os.system("/bin/bash /root/Desktop/stats.sh " + chosen_personality + ".f " + str(round(conf_interval, 5)) + " " +
