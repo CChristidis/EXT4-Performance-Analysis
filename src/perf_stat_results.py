@@ -22,7 +22,7 @@ def get_perfstat_numbers(lines):
 	return results
 	#
 
-def str(results):
+def to_str(results):
 	results_str =  ", ".join(results)
 	return results_str
 
@@ -33,7 +33,7 @@ def main(*args):
 	lines = get_lines("perf_stat_results.txt")
 	lines = clear_unwanted_lines(lines)
 	results = get_perfstat_numbers(lines)
-	results_str = str(results)
+	results_str = to_str(results)
 	# print("sed ' 1 s/.*/&, " + results_str + "/' experiment_stats.txt")
 	os.system("sed ' $ s/.*/&, " + results_str + "/' experiment_stats_temp.txt >> experiment_stats.txt")
 
